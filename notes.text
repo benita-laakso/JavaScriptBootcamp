@@ -1,0 +1,88 @@
+return     When we use the return statement, we return from the function we are currently in
+           You can not return from a perent function inside of a child function
+           (When finctions are nested like callback functions)
+
+
+Ex.
+getPuzzle() - Parent
+callback function - child (e)
+
+const getPuzzle = () =>{
+   
+const request = new XMLHttpRequest()
+
+request.addEventListener('readystatechange', (e) => {
+   if(e.target.readyState === 4 && e.target.status === 200) {//e.target contains the request itself, 4 - DONE  Status 200 , it fineshed sucessfully
+      const data = JSON.parse(e.target.responseText) // responseText - contains the JSON response
+      console.log(data)
+   }else if(e.target.readyState === 4 ) {
+      console.log('An error has accured')
+   }
+})
+
+request.open('GET', 'http://puzzle.mead.io/puzzle')
+request.send()
+   
+}
+
+callback  function
+
+
+
+Insted of relying on a return value Ex
+
+const puzzle = getPuzzle()
+console.log(puzzle)
+
+We rely on a callback function
+We pass a function into getPuzzle()
+
+getPuzzle( (puzzle) => {
+   console.log(puzzle)
+})
+
+Callback function callback function call
+
+const getPuzzle = (callback) =>{
+   callback('Some fake puzzle')
+}
+
+
+Syncronus and asyncronouse
+
+
+------
+      -
+       --
+         -----
+
+------
+ -
+  --
+   -----         
+
+Syncronous
+
+When we execute somthing syncronousley, we star some sort of task, like feching a puzzle
+we have to wait for the task to finish before we can move on to the next thing.
+We are only ever doing one thing at a time
+
+asyncronouse
+
+When we execute somthing asyncronously, we can start some task 
+then we can actually get other work done before the task compleats
+
+With an asyncronys request, we can do other things whilst we are waiting 
+for the data to come back from the server
+
+async benefit
+We don´t want task two to wait for task one to finish
+if tast two is not dependent on task one
+There can be menny http request pending at sam time
+The time it takes to do a tasks over lap each other and ther is les time to wait
+
+asyncronus is faster 
+doesn´t block the user from userinterface
+doesn´t prevent other code that is not related from running
+
+sync async - blocking non blocking

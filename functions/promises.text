@@ -1,0 +1,28 @@
+
+
+//using new operator with the promise constructor function
+// the Promise expects a function as its single argument
+//the function gets called right oway
+//we can perfor our long running proses in the function body
+// When the Promise constructor function calls the function, it calls it with two arguments;
+//resolve, reject
+//resolve -things went well
+//reject - if things went pourly
+//with Promise we have two seperate functions
+
+//With Primises you can only resolve or reject, you can call one one time with a single value
+// If you wanyt to pass back multipla pises of information : pot all the kinformation on an object and resolve or reject the object
+
+
+then
+//calling the  method then  on a Promise instance   
+//This lets us define what we want to do when we actually have the information
+//we are passing a function that will run when the Promise resoves, meaning that things went well
+//we get acsess to the data via the first argument
+
+
+myPromise.then((data)=>{
+        console.log(data)
+},(err)=>{
+    console.log(err)
+})
