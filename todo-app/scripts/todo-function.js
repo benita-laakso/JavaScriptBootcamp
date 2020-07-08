@@ -1,11 +1,12 @@
 'use strict'
 
-//fetch existing todos from localStorage
+//Fetch existing todos from localStorage
 const getSavedTodos = () => {
     const todosJSON = localStorage.getItem('todos')//Reading data from localStorage
-    try{return todosJSON ? JSON.parse(todosJSON): [] // Taking our string and getting back an arrays
+    try{
+        return todosJSON ? JSON.parse(todosJSON): [] // Taking our string and getting back an arrays
         //return todosJSON !== null ? JSON.parse(todosJSON): [] /// Same code longer version
-    }catch(e){
+    } catch (e) {
         return []
     }
 }
@@ -18,43 +19,50 @@ const saveTodos = (todos) => {
 ///Remove todo by id
 const removeTodo = (id) => {
     const todoIndex = todos.findIndex((todo) => todo.id === id)
+
     if(todoIndex > -1){
         todos.splice(todoIndex, 1)
     }
-
 }
 
 //Toggle the compleated value for a given todo
 const toggleTodo = (id) => {
     const todo = todos.find((todo)=> todo.id === id)
-    if(todo){ // If todo exists set its compleated value
+
+    if( todo) { // If todo exists set its compleated value
         todo.compleated = !todo.compleated
-
-
     }
 }
 
 //Render todos
 
-const renderTodos = (todos,filters) => {
-    
-    const filterdTodos = todos.filter( (todo) =>{
-      let serchTextMatch = todo.text.toLowerCase().includes(filters.serchText.toLowerCase())
-      let hideCompleatedMatch = !filters.hideCompleated || !todo.compleated
+const renderTodos = (todos, filters) => {
+    const todoEl = document.querySelector('#todos')
+    const filterdTodos = todos.filter((todo) => {
+      const serchTextMatch = todo.text.toLowerCase().includes(filters.serchText.toLowerCase())
+      const hideCompleatedMatch = !filters.hideCompleated || !todo.compleated
       
       return serchTextMatch && hideCompleatedMatch 
     })
    
-    const incompleteTodos = filterdTodos.filter((todo) =>  !todo.compleated )
+    const incompleteTodos = filterdTodos.filter((todo) =>  !todo.compleated)
 
-  document.querySelector('#todos').innerHTML =''
- document.querySelector('#todos').appendChild(generateSummeryDOM(incompleteTodos))
+  todoEl.innerHTML = ''
+ todoEl.appendChild(generateSummeryDOM(incompleteTodos))
 
-filterdTodos.forEach((todo) => {
-    document.querySelector('#todos').appendChild(generateTodoDOM(todo))
-    
+    //If there are no todos we will rener a pharagraph
+if (filterdTodos.length > 0)   {
+ //if ther are Todos we are rendering them with tihis code
+ filterdTodos.forEach((todo) => {
+    todoEl.appendChild(generateTodoDOM(todo))
 })
-    
+} 
+else{ 
+    const messageEl = document.createElement('p')
+messageEl.classList.add('empty-message')
+messageEl.textContent = 'No to-dos'
+todoEl.appendChild(messageEl)
+} 
 }
 //Get the DOM element for the individual note
 const generateTodoDOM = (todo) => {
@@ -67,11 +75,11 @@ const generateTodoDOM = (todo) => {
     //Setup todo checkbox
     checkbox.setAttribute('type','checkbox')
     checkbox.checked = todo.compleated
-    contaierEl.appendChild(checkbox)
-    checkbox.addEventListener('change',()=>{
+    containerEl.appendChild(checkbox)
+    checkbox.addEventListener('change',() =>{
         toggleTodo(todo.id)
         saveTodos(todos)
-        renderTodos(todos,filters)
+        renderTodos(todos, filters)
     })
     
 //Setup the todo text
@@ -97,9 +105,11 @@ removeButton.addEventListener('click',() =>{
     return todoEl
 }
 
-//////
+//////Gett the DOM elements for list summery
 const generateSummeryDOM = (incompleteTodos) => {
-    const summery = document.createElement('h2')
-    summery.textContent =`You have ${incompleteTodos.length} things on the list`
-    return summery
+    const summary = document.createElement('h2')
+    const plural = incompleteTodos.length === 1 ? '' :'s'
+    summary.classList.add('list-title')
+    summary.textContent =`You have ${incompleteTodos.length} todos${plural} things on the list`
+    return summary
 }

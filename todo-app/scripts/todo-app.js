@@ -23,7 +23,7 @@ if (text.length > 0){
 
   todos.push({
     id:uuidv4(),
-    text,
+    text:text,
     compleated: false  
   })
   saveTodos(todos) // Passing in todos array
